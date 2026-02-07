@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1a73e8;
+      font-size: 20px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: #e0e0e0;
+      color: #555;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      transition: background 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #1a73e8;
+      color: #fff;
+    }
+
+    .tab-content {
+      display: none;
+      background: #fff;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .form-group label .required {
+      color: #d32f2f;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+    }
+
+    .form-group textarea {
+      height: 60px;
+      resize: vertical;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #1a73e8;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1557b0;
+    }
+
+    .btn-primary:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #ccc;
+    }
+
+    .btn-danger {
+      background: #d32f2f;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #b71c1c;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .form-actions {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    /* Message */
+    .message {
+      padding: 10px 16px;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      display: none;
+      font-weight: bold;
+    }
+
+    .message.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    .message.error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
+
+    /* Filter Section */
+    .filter-section {
+      margin-bottom: 16px;
+      padding: 14px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .filter-section h3 {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .filter-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    /* Multi-select checkbox dropdown */
+    .multi-select {
+      position: relative;
+    }
+
+    .multi-select-trigger {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      background: #fff;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-height: 36px;
+    }
+
+    .multi-select-trigger:hover {
+      border-color: #1a73e8;
+    }
+
+    .multi-select-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 100;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .multi-select-dropdown.open {
+      display: block;
+    }
+
+    .multi-select-dropdown label {
+      display: flex;
+      align-items: center;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: normal;
+    }
+
+    .multi-select-dropdown label:hover {
+      background: #f0f0f0;
+    }
+
+    .multi-select-dropdown label input {
+      margin-right: 8px;
+    }
+
+    /* Aggregation */
+    .aggregation {
+      margin-bottom: 16px;
+      padding: 14px;
+      background: #e3f2fd;
+      border-radius: 6px;
+      border: 1px solid #90caf9;
+    }
+
+    .agg-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .agg-item {
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+
+    .agg-item .agg-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1a73e8;
+    }
+
+    .agg-item .agg-label {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .agg-breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .agg-breakdown-section {
+      flex: 1;
+      min-width: 200px;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+
+    .agg-breakdown-section h4 {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 4px;
+    }
+
+    .agg-breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      font-size: 13px;
+    }
+
+    .agg-breakdown-row .count {
+      font-weight: bold;
+      color: #1a73e8;
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table th {
+      background: #1a73e8;
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+
+    table tbody tr:hover {
+      background: #f5f9ff;
+    }
+
+    table tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    table tbody tr:nth-child(even):hover {
+      background: #f5f9ff;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* Edit Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .modal h2 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #e0e0e0;
+      border-top: 3px solid #1a73e8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 8px 0;
+    }
+
+    .pagination .btn {
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+
+    .pagination .page-info {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 8px;
+      }
+
+      .filter-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .filter-group {
+        min-width: 100%;
+      }
+
+      .agg-summary {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .agg-breakdown {
+        flex-direction: column;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      table th, table td {
+        padding: 6px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>前日TEL不都合案件</h1>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('input')">入力フォーム</button>
+      <button class="tab-btn" onclick="switchTab('list')">一覧・集計</button>
+    </div>
+
+    <!-- Input Form Tab -->
+    <div id="tab-input" class="tab-content active">
+      <div id="formMessage" class="message"></div>
+
+      <form id="registerForm" onsubmit="return false;">
+        <div class="form-group">
+          <label>担当（苗字）<span class="required">必須</span></label>
+          <input type="text" id="input-tantou" required placeholder="例: 田中" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label>理由<span class="required">必須</span></label>
+          <select id="input-riyuu" required>
+            <option value="">選択してください</option>
+            <option value="時間不都合">時間不都合</option>
+            <option value="CS追加">CS追加</option>
+            <option value="日延">日延</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>対応<span class="required">必須</span></label>
+          <select id="input-taiou" required>
+            <option value="">選択してください</option>
+            <option value="ご納得">ご納得</option>
+            <option value="日付変更">日付変更</option>
+            <option value="別便配送">別便配送</option>
+            <option value="ルート変更">ルート変更</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>対応者<span class="required">必須</span></label>
+          <select id="input-taiousha" required>
+            <option value="">選択してください</option>
+            <option value="担当">担当</option>
+            <option value="店">店</option>
+            <option value="DC">DC</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>備考</label>
+          <textarea id="input-bikou" placeholder="任意入力"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" id="registerBtn" onclick="submitForm()">登録</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- List Tab -->
+    <div id="tab-list" class="tab-content">
+      <!-- Aggregation -->
+      <div id="aggregation" class="aggregation">
+        <div class="agg-summary" id="aggSummary"></div>
+        <div class="agg-breakdown" id="aggBreakdown"></div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-section">
+        <h3>フィルタ</h3>
+        <div class="filter-row">
+          <div class="filter-group">
+            <label>担当</label>
+            <div class="multi-select" id="filter-tantou-wrap">
+              <button type="button" class="multi-select-trigger" onclick="toggleDropdown('filter-tantou')">すべて</button>
+              <div class="multi-select-dropdown" id="filter-tantou"></div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>理由</label>
+            <div class="multi-select" id="filter-riyuu-wrap">
+              <button type="button" class="multi-select-trigger" onclick="toggleDropdown('filter-riyuu')">すべて</button>
+              <div class="multi-select-dropdown" id="filter-riyuu"></div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>対応</label>
+            <div class="multi-select" id="filter-taiou-wrap">
+              <button type="button" class="multi-select-trigger" onclick="toggleDropdown('filter-taiou')">すべて</button>
+              <div class="multi-select-dropdown" id="filter-taiou"></div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>対応者</label>
+            <div class="multi-select" id="filter-taiousha-wrap">
+              <button type="button" class="multi-select-trigger" onclick="toggleDropdown('filter-taiousha')">すべて</button>
+              <div class="multi-select-dropdown" id="filter-taiousha"></div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-primary btn-sm" onclick="applyFilters()">検索</button>
+            <button class="btn btn-secondary btn-sm" onclick="clearFilters()">クリア</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="table-wrapper">
+        <div id="listLoading" class="loading">
+          <div class="spinner"></div>
+          <div>データを読み込み中...</div>
+        </div>
+        <table id="dataTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>登録日時</th>
+              <th>担当</th>
+              <th>理由</th>
+              <th>対応</th>
+              <th>対応者</th>
+              <th>備考</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+        <div id="noData" class="no-data" style="display:none;">データがありません</div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination" style="display:none;">
+        <button class="btn btn-secondary btn-sm" id="prevBtn" onclick="changePage(-1)">前へ</button>
+        <span class="page-info" id="pageInfo"></span>
+        <button class="btn btn-secondary btn-sm" id="nextBtn" onclick="changePage(1)">次へ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <h2>レコード編集</h2>
+      <div id="editMessage" class="message"></div>
+      <input type="hidden" id="edit-rowIndex">
+
+      <div class="form-group">
+        <label>担当（苗字）<span class="required">必須</span></label>
+        <input type="text" id="edit-tantou" required>
+      </div>
+
+      <div class="form-group">
+        <label>理由<span class="required">必須</span></label>
+        <select id="edit-riyuu" required>
+          <option value="">選択してください</option>
+          <option value="時間不都合">時間不都合</option>
+          <option value="CS追加">CS追加</option>
+          <option value="日延">日延</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>対応<span class="required">必須</span></label>
+        <select id="edit-taiou" required>
+          <option value="">選択してください</option>
+          <option value="ご納得">ご納得</option>
+          <option value="日付変更">日付変更</option>
+          <option value="別便配送">別便配送</option>
+          <option value="ルート変更">ルート変更</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>対応者<span class="required">必須</span></label>
+        <select id="edit-taiousha" required>
+          <option value="">選択してください</option>
+          <option value="担当">担当</option>
+          <option value="店">店</option>
+          <option value="DC">DC</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>備考</label>
+        <textarea id="edit-bikou"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeEditModal()">キャンセル</button>
+        <button class="btn btn-primary" id="updateBtn" onclick="submitUpdate()">更新</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    var allData = [];
+    var filteredData = [];
+    var currentPage = 1;
+    var pageSize = 50;
+
+    // ===== Tab Switching =====
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+
+      if (tab === 'input') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('tab-input').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('tab-list').classList.add('active');
+        loadData();
+      }
+    }
+
+    // ===== Form Submission =====
+    function submitForm() {
+      var tantou = document.getElementById('input-tantou').value.trim();
+      var riyuu = document.getElementById('input-riyuu').value;
+      var taiou = document.getElementById('input-taiou').value;
+      var taiousha = document.getElementById('input-taiousha').value;
+      var bikou = document.getElementById('input-bikou').value.trim();
+
+      // Validation
+      if (!tantou) { showMessage('formMessage', '担当を入力してください。', 'error'); return; }
+      if (!riyuu) { showMessage('formMessage', '理由を選択してください。', 'error'); return; }
+      if (!taiou) { showMessage('formMessage', '対応を選択してください。', 'error'); return; }
+      if (!taiousha) { showMessage('formMessage', '対応者を選択してください。', 'error'); return; }
+
+      var btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.textContent = '登録中...';
+
+      var formData = {
+        '担当': tantou,
+        '理由': riyuu,
+        '対応': taiou,
+        '対応者': taiousha,
+        '備考': bikou
+      };
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          btn.disabled = false;
+          btn.textContent = '登録';
+          if (result.success) {
+            showMessage('formMessage', result.message, 'success');
+            resetForm();
+            // Focus on first input for continuous entry
+            document.getElementById('input-tantou').focus();
+          } else {
+            showMessage('formMessage', result.message, 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          btn.textContent = '登録';
+          showMessage('formMessage', '通信エラー: ' + err.message, 'error');
+        })
+        .registerRecord(formData);
+    }
+
+    function resetForm() {
+      document.getElementById('input-tantou').value = '';
+      document.getElementById('input-riyuu').value = '';
+      document.getElementById('input-taiou').value = '';
+      document.getElementById('input-taiousha').value = '';
+      document.getElementById('input-bikou').value = '';
+    }
+
+    // ===== Data Loading =====
+    function loadData() {
+      document.getElementById('listLoading').style.display = 'block';
+      document.getElementById('dataTable').style.display = 'none';
+      document.getElementById('noData').style.display = 'none';
+      document.getElementById('pagination').style.display = 'none';
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          document.getElementById('listLoading').style.display = 'none';
+          if (result.success) {
+            allData = result.data;
+            filteredData = allData.slice();
+            currentPage = 1;
+            buildFilterOptions();
+            renderTable();
+            renderAggregation();
+          } else {
+            document.getElementById('noData').style.display = 'block';
+            document.getElementById('noData').textContent = result.message || 'データの取得に失敗しました';
+          }
+        })
+        .withFailureHandler(function(err) {
+          document.getElementById('listLoading').style.display = 'none';
+          document.getElementById('noData').style.display = 'block';
+          document.getElementById('noData').textContent = '通信エラー: ' + err.message;
+        })
+        .getAllRecords();
+    }
+
+    // ===== Multi-select Dropdowns =====
+    function buildFilterOptions() {
+      var fields = {
+        'filter-tantou': '担当',
+        'filter-riyuu': '理由',
+        'filter-taiou': '対応',
+        'filter-taiousha': '対応者'
+      };
+
+      Object.keys(fields).forEach(function(id) {
+        var key = fields[id];
+        var valuesSet = {};
+        allData.forEach(function(row) {
+          if (row[key]) valuesSet[row[key]] = true;
+        });
+        var values = Object.keys(valuesSet).sort();
+
+        var dropdown = document.getElementById(id);
+        dropdown.innerHTML = '';
+        values.forEach(function(val) {
+          var label = document.createElement('label');
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.value = val;
+          cb.dataset.field = key;
+          label.appendChild(cb);
+          label.appendChild(document.createTextNode(val));
+          dropdown.appendChild(label);
+        });
+      });
+    }
+
+    function toggleDropdown(id) {
+      // Close all other dropdowns
+      document.querySelectorAll('.multi-select-dropdown').forEach(function(d) {
+        if (d.id !== id) d.classList.remove('open');
+      });
+      document.getElementById(id).classList.toggle('open');
+    }
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.multi-select')) {
+        document.querySelectorAll('.multi-select-dropdown').forEach(function(d) {
+          d.classList.remove('open');
+        });
+      }
+    });
+
+    function getSelectedValues(id) {
+      var checkboxes = document.getElementById(id).querySelectorAll('input:checked');
+      var values = [];
+      checkboxes.forEach(function(cb) { values.push(cb.value); });
+      return values;
+    }
+
+    function updateTriggerText(wrapperId, selectedValues) {
+      var trigger = document.getElementById(wrapperId).querySelector('.multi-select-trigger');
+      if (selectedValues.length === 0) {
+        trigger.textContent = 'すべて';
+      } else {
+        trigger.textContent = selectedValues.join(', ');
+      }
+    }
+
+    // ===== Filtering =====
+    function applyFilters() {
+      var tantouFilter = getSelectedValues('filter-tantou');
+      var riyuuFilter = getSelectedValues('filter-riyuu');
+      var taiouFilter = getSelectedValues('filter-taiou');
+      var taioushaFilter = getSelectedValues('filter-taiousha');
+
+      updateTriggerText('filter-tantou-wrap', tantouFilter);
+      updateTriggerText('filter-riyuu-wrap', riyuuFilter);
+      updateTriggerText('filter-taiou-wrap', taiouFilter);
+      updateTriggerText('filter-taiousha-wrap', taioushaFilter);
+
+      filteredData = allData.filter(function(row) {
+        if (tantouFilter.length > 0 && tantouFilter.indexOf(row['担当']) === -1) return false;
+        if (riyuuFilter.length > 0 && riyuuFilter.indexOf(row['理由']) === -1) return false;
+        if (taiouFilter.length > 0 && taiouFilter.indexOf(row['対応']) === -1) return false;
+        if (taioushaFilter.length > 0 && taioushaFilter.indexOf(row['対応者']) === -1) return false;
+        return true;
+      });
+
+      currentPage = 1;
+      renderTable();
+      renderAggregation();
+
+      // Close all dropdowns
+      document.querySelectorAll('.multi-select-dropdown').forEach(function(d) {
+        d.classList.remove('open');
+      });
+    }
+
+    function clearFilters() {
+      document.querySelectorAll('.multi-select-dropdown input').forEach(function(cb) {
+        cb.checked = false;
+      });
+      document.querySelectorAll('.multi-select-trigger').forEach(function(t) {
+        t.textContent = 'すべて';
+      });
+      filteredData = allData.slice();
+      currentPage = 1;
+      renderTable();
+      renderAggregation();
+    }
+
+    // ===== Aggregation =====
+    function renderAggregation() {
+      var totalCount = allData.length;
+      var filteredCount = filteredData.length;
+      var percentage = totalCount > 0 ? ((filteredCount / totalCount) * 100).toFixed(1) : '0.0';
+
+      // Summary
+      var summaryHtml = '';
+      summaryHtml += '<div class="agg-item"><div class="agg-label">全件数</div><div class="agg-value">' + totalCount + '</div></div>';
+      summaryHtml += '<div class="agg-item"><div class="agg-label">フィルタ後件数</div><div class="agg-value">' + filteredCount + '</div></div>';
+      summaryHtml += '<div class="agg-item"><div class="agg-label">割合</div><div class="agg-value">' + percentage + '%</div></div>';
+      document.getElementById('aggSummary').innerHTML = summaryHtml;
+
+      // Breakdowns (based on filtered data)
+      var riyuuCount = countByField(filteredData, '理由');
+      var taiouCount = countByField(filteredData, '対応');
+      var taioushaCount = countByField(filteredData, '対応者');
+
+      var breakdownHtml = '';
+      breakdownHtml += renderBreakdownSection('理由別', riyuuCount);
+      breakdownHtml += renderBreakdownSection('対応別', taiouCount);
+      breakdownHtml += renderBreakdownSection('対応者別', taioushaCount);
+      document.getElementById('aggBreakdown').innerHTML = breakdownHtml;
+    }
+
+    function countByField(data, field) {
+      var counts = {};
+      data.forEach(function(row) {
+        var val = row[field] || '(未設定)';
+        counts[val] = (counts[val] || 0) + 1;
+      });
+      return counts;
+    }
+
+    function renderBreakdownSection(title, counts) {
+      var html = '<div class="agg-breakdown-section"><h4>' + escapeHtml(title) + '</h4>';
+      var keys = Object.keys(counts).sort();
+      keys.forEach(function(key) {
+        html += '<div class="agg-breakdown-row"><span>' + escapeHtml(key) + '</span><span class="count">' + counts[key] + '件</span></div>';
+      });
+      if (keys.length === 0) {
+        html += '<div class="agg-breakdown-row"><span style="color:#999;">データなし</span></div>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    // ===== Table Rendering =====
+    function renderTable() {
+      var tbody = document.getElementById('dataBody');
+      var table = document.getElementById('dataTable');
+      var noData = document.getElementById('noData');
+      var pagination = document.getElementById('pagination');
+
+      if (filteredData.length === 0) {
+        table.style.display = 'none';
+        noData.style.display = 'block';
+        noData.textContent = 'データがありません';
+        pagination.style.display = 'none';
+        return;
+      }
+
+      // Pagination
+      var totalPages = Math.ceil(filteredData.length / pageSize);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      var startIdx = (currentPage - 1) * pageSize;
+      var endIdx = Math.min(startIdx + pageSize, filteredData.length);
+      var pageData = filteredData.slice(startIdx, endIdx);
+
+      tbody.innerHTML = '';
+      pageData.forEach(function(row) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + escapeHtml(row['登録日時']) + '</td>' +
+          '<td>' + escapeHtml(row['担当']) + '</td>' +
+          '<td>' + escapeHtml(row['理由']) + '</td>' +
+          '<td>' + escapeHtml(row['対応']) + '</td>' +
+          '<td>' + escapeHtml(row['対応者']) + '</td>' +
+          '<td>' + escapeHtml(row['備考']) + '</td>' +
+          '<td><button class="btn btn-secondary btn-sm" onclick="openEditModal(' + row.rowIndex + ', this)">編集</button></td>';
+        tbody.appendChild(tr);
+      });
+
+      table.style.display = 'table';
+      noData.style.display = 'none';
+
+      // Pagination controls
+      if (totalPages > 1) {
+        pagination.style.display = 'flex';
+        document.getElementById('prevBtn').disabled = currentPage <= 1;
+        document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+        document.getElementById('pageInfo').textContent = currentPage + ' / ' + totalPages + ' ページ（' + filteredData.length + '件）';
+      } else {
+        pagination.style.display = 'none';
+      }
+    }
+
+    function changePage(delta) {
+      currentPage += delta;
+      renderTable();
+    }
+
+    // ===== Edit Modal =====
+    function openEditModal(rowIndex, btn) {
+      // Find data from the row
+      var row = allData.find(function(r) { return r.rowIndex === rowIndex; });
+      if (!row) { alert('データが見つかりません。'); return; }
+
+      document.getElementById('edit-rowIndex').value = rowIndex;
+      document.getElementById('edit-tantou').value = row['担当'];
+      document.getElementById('edit-riyuu').value = row['理由'];
+      document.getElementById('edit-taiou').value = row['対応'];
+      document.getElementById('edit-taiousha').value = row['対応者'];
+      document.getElementById('edit-bikou').value = row['備考'];
+
+      hideMessage('editMessage');
+      document.getElementById('editModal').classList.add('open');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').classList.remove('open');
+    }
+
+    function submitUpdate() {
+      var rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
+      var tantou = document.getElementById('edit-tantou').value.trim();
+      var riyuu = document.getElementById('edit-riyuu').value;
+      var taiou = document.getElementById('edit-taiou').value;
+      var taiousha = document.getElementById('edit-taiousha').value;
+      var bikou = document.getElementById('edit-bikou').value.trim();
+
+      if (!tantou) { showMessage('editMessage', '担当を入力してください。', 'error'); return; }
+      if (!riyuu) { showMessage('editMessage', '理由を選択してください。', 'error'); return; }
+      if (!taiou) { showMessage('editMessage', '対応を選択してください。', 'error'); return; }
+      if (!taiousha) { showMessage('editMessage', '対応者を選択してください。', 'error'); return; }
+
+      var btn = document.getElementById('updateBtn');
+      btn.disabled = true;
+      btn.textContent = '更新中...';
+
+      var formData = {
+        '担当': tantou,
+        '理由': riyuu,
+        '対応': taiou,
+        '対応者': taiousha,
+        '備考': bikou
+      };
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          btn.disabled = false;
+          btn.textContent = '更新';
+          if (result.success) {
+            closeEditModal();
+            loadData(); // Reload data
+          } else {
+            showMessage('editMessage', result.message, 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          btn.textContent = '更新';
+          showMessage('editMessage', '通信エラー: ' + err.message, 'error');
+        })
+        .updateRecord(rowIndex, formData);
+    }
+
+    // ===== Utilities =====
+    function showMessage(id, text, type) {
+      var el = document.getElementById(id);
+      el.textContent = text;
+      el.className = 'message ' + type;
+      el.style.display = 'block';
+      if (type === 'success') {
+        setTimeout(function() { el.style.display = 'none'; }, 3000);
+      }
+    }
+
+    function hideMessage(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
